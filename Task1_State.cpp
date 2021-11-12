@@ -7,7 +7,7 @@ struct state{
     string first_name;
     string last_name;
     string date;
-    int cash;
+    int cash = 0;
 };
 
 void add(ofstream& file, state& record) {
@@ -15,11 +15,21 @@ void add(ofstream& file, state& record) {
 }
 
 void read(ifstream& file, state& record) {
-    do {
+/*    do {
         file >> record.first_name >> record.last_name >> record.date >> record.cash;
         cout << record.first_name << " " << record.last_name << " "  << record.date << " " << record.cash
         << " " << endl;
-    } while(!(file.eof() || record.first_name.empty()));
+    } while(!(file.eof() || record.first_name.empty()));*/
+    while(!(file.eof())) {
+        file >> record.first_name >> record.last_name >> record.date >> record.cash;
+        if (record.first_name.empty()) {
+            break;
+        } else {
+            cout << record.first_name << " " << record.last_name << " "  << record.date << " " << record.cash
+                 << " " << endl;
+            record.first_name = "";
+        }
+    }
 }
 
 int main() {

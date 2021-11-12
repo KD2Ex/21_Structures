@@ -3,8 +3,9 @@
 #include <vector>
 using namespace std;
 
+
 enum houseType{
-    DWELLING_HOUSE,
+    HOUSE,
     GARAGE,
     BARN,
     BATH,
@@ -18,41 +19,87 @@ enum roomType {
     CHILDREN_ROOM,
 };
 
-struct room {
+struct Room {
+    int square = 0;
     roomType type;
-    int square = 0;
 };
 
-struct level {
+struct Floor {
     int height = 0;
-    room rooms[4];
+    vector<Room> rooms;
 };
 
-struct house {
-    houseType type;
+struct House {
     int square = 0;
-    level levels[3];
+    vector<Floor> floors;
     bool oven = false;
 };
 
-struct plot {
-    int id = 0;
-    vector<house> houses;
+struct Garage {
+    int square = 0;
 };
 
+struct Barn {
+    int square = 0;
+};
+
+struct Bath {
+    int square = 0;
+    bool oven = false;
+};
+
+struct Plot {
+    int id = 0;
+    House house;
+    Garage garage;
+    Barn barn;
+    Bath bath;
+};
 
 int main() {
-    plot plot;
-
     int plotCount;
+    int buildingsCount = 0;
+    int floorsCount = 0;
     cin >> plotCount;
+    vector<Plot> plots;
     for (int i = 0; i < plotCount; ++i) {
+        Plot plot;
         plot.id++;
-        int houseCount;
-        cin >> houseCount;
-        for (int j = 0; j < houseCount; ++j) {
+        cin >> buildingsCount;
+        for (int j = 0; j < buildingsCount; ++j) {
+            char answer;
+            cin >> answer;
+            switch (answer) {
+                case HOUSE:
+                    cin >> plot.house.square;
+                    cin >> answer;
+                    if (answer == 'y' || answer == 'Y') {
+                        plot.house.oven = true;
+                    } else if (answer == 'n' || answer == 'N') {
+                        plot.house.oven = false;
+                    }
+                    cin >> floorsCount;
+                    for (int k = 0; k < floorsCount; ++k) {
+                        Floor floor;
+                        cin >> floor.height;
+                        int roomCount;
+                        cin >> roomCount;
+                        for (int l = 0; l < roomCount; ++l) {
 
+                        }
+                        plot.house.floors.push_back(floor);
+                    }
+                    break;
+                case GARAGE:
+                    break;
+                case BARN:
+                    break;
+                case BATH:
+                    break;
+                default:
+                    break;
+            }
         }
+        plots.push_back(plot);
     }
-
 }
