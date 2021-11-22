@@ -6,9 +6,7 @@
 #include <ctime>
 using namespace std;
 
-char GameMap [10][10];
 const int PLAYER_INDEX = 0;
-
 
 struct Character {
     int health;
@@ -26,22 +24,22 @@ enum Directions {
     LEFT,
     TOP,
     RIGHT,
-    BOTTOM,
-    WAIT
+    BOTTOM
 };
 
 
 void printGameMap (vector<Character> characters) {
+    char GameMap [40][40];
     cout << " ";
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 40; i++)
     {
         cout << i;
     }
     cout << endl;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 40; i++)
     {
         cout << i;
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 40; j++)
         {
             if (j == characters[0].coordinates.x && i == characters[0].coordinates.y) {
                 cout << "P";
@@ -151,10 +149,10 @@ bool isEndOfMapReached(int direction, Character character) {
             if (character.coordinates.y == 0) return true;
             break;
         case RIGHT:
-            if (character.coordinates.x == 9) return true;
+            if (character.coordinates.x == 39) return true;
             break;
         case BOTTOM:
-            if (character.coordinates.y == 9) return true;
+            if (character.coordinates.y == 39) return true;
             break;
     }
 
@@ -244,8 +242,6 @@ void move (Character& character, int direction) {
         case BOTTOM:
             character.coordinates.y++;
             break;
-        case WAIT:
-            break;
     }
 }
 
@@ -270,8 +266,8 @@ void dataInitialisation(vector<Character>& characters) {
     cout << "Enter the stats of your getCharacterByCoordinates: [Health] [Armor] [Damage]\n";
     cin >> player.health >> player.armor >> player.damage;
 
-    player.coordinates.x = rand() % 10;
-    player.coordinates.y = rand() % 10;
+    player.coordinates.x = rand() % 40;
+    player.coordinates.y = rand() % 40;
     characters.push_back(player);
     
     for (int i = 1; i < 6; i++)
@@ -280,8 +276,8 @@ void dataInitialisation(vector<Character>& characters) {
         int enemyX;
         int enemyY;
         do {
-            enemyX = rand() % 10;
-            enemyY = rand() % 10;
+            enemyX = rand() % 40;
+            enemyY = rand() % 40;
         } while(!isSquareClear(enemyX, enemyY, characters));
         enemy.coordinates.x = enemyX;
         enemy.coordinates.y = enemyY;
@@ -364,13 +360,21 @@ int main() {
             direction = BOTTOM;
         } else if (inputDirection == "save") {
             ofstream saveFile("save.bin", ios::binary);
-            saveCharacter(saveFile, characters);
-            saveFile.close();
+            if (saveFile.is_open()) {
+                saveCharacter(saveFile, characters);
+                saveFile.close();
+            } else {
+                cout << "Cannot open the file\n";
+            }
             continue;
         } else if (inputDirection == "load") {
             ifstream loadFile("save.bin", ios::binary);
-            loadCharacter(loadFile, characters);
-            loadFile.close();
+            if (loadFile.is_open()) {
+                loadCharacter(loadFile, characters);
+                loadFile.close();
+            } else {
+                cout << "Cannot open the file\n";
+            }
             continue;
         }
 
