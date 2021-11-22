@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <ostream>
+#include <fstream>
 #include <vector>
 using namespace std;
 
@@ -116,10 +118,12 @@ bool isInputRight(string str) {
         str != "right" &&
         str != "top" &&
         str != "bottom" && 
-        str != "w") {
+        str != "w" &&
+        str != "save" &&
+        str != "load") {
         cout << "Wrong direction!" << endl;
         return false;
-    }
+    } 
     return true;
 }
 
@@ -165,46 +169,42 @@ bool isPlayerAhead(int direction, vector<Character> characters, int index = 0) {
 
     int x = characters[index].coordinats.x;
     int y = characters[index].coordinats.y;
+    int playerX = characters[PLAYER_INDEX].coordinats.x;
+    int playerY = characters[PLAYER_INDEX].coordinats.y;
     switch (direction) {
         case LEFT:
-            if (characters[0].coordinats.x == x - 1 && characters[0].coordinats.y == y){
-                
-                return true;
-            }
+            if (playerX == x - 1 && playerY == y) return true;
             break;
         case TOP:
-            if (!isSquareClear(x, y - 1, characters)) 
-                return true;
+            if (playerX == x && playerY == y - 1) return true;
             break;
         case RIGHT:
-            if (!isSquareClear(x + 1, y, characters)) 
-                return true;
+            if (playerX == x + 1 && playerY == y) return true;
             break;
         case BOTTOM:
-            if (!isSquareClear(x, y + 1, characters)) 
-                return true;
+            if (playerX == x && playerY == y + 1) return true;
             break;
     }
-    switch (direction) {
-        case LEFT:
-            if (GameMap[character.coordinats.y][character.coordinats.x - 1] == 'P') return true;
-            break;
-        case TOP:
-            if (GameMap[character.coordinats.y - 1][character.coordinats.x] == 'P') return true;
-            break;
-        case RIGHT:
-            if (GameMap[character.coordinats.y][character.coordinats.x + 1] == 'P') return true;
-            break;
-        case BOTTOM:
-            if (GameMap[character.coordinats.y + 1][character.coordinats.x] == 'P') return true;
-            break;
-    }
+    // switch (direction) {
+    //     case LEFT:
+    //         if (GameMap[character.coordinats.y][character.coordinats.x - 1] == 'P') return true;
+    //         break;
+    //     case TOP:
+    //         if (GameMap[character.coordinats.y - 1][character.coordinats.x] == 'P') return true;
+    //         break;
+    //     case RIGHT:
+    //         if (GameMap[character.coordinats.y][character.coordinats.x + 1] == 'P') return true;
+    //         break;
+    //     case BOTTOM:
+    //         if (GameMap[character.coordinats.y + 1][character.coordinats.x] == 'P') return true;
+    //         break;
+    // }
     return false;
 }
 
 bool isSquareClear(int x, int y, vector<Character> characters) {
-    for (int i = 1; i < 6; i++) {
-        if (characters[i].x == x && characters[i].y == y) return false;
+    for (int i = 0; i < characters.size(); i++) {
+        if (characters[i].coordinats.x == x && characters[i].coordinats.y == y) return false;
     }
     return true;
 }
@@ -324,12 +324,18 @@ void dataInitialisation(vector<Character>& characters) {
     for (int i = 1; i < 6; i++)
     {
         Character enemy;
+        int enemyX;
+        int enemyY;
+        do {
+            enemyX = rand() % 10;
+            enemyY = rand() % 10;
+        } while(!isSquareClear(enemyX, enemyY, characters));
+        enemy.coordinats.x = enemyX;
+        enemy.coordinats.y = enemyY;
         enemy.isPlayer = false;
         enemy.health = rand() % 100 + 50;
         enemy.armor = rand() % 50;
         enemy.damage = rand() % 15 + 15;
-        enemy.coordinats.x = rand() % 10;
-        enemy.coordinats.y = rand() % 10;
         enemy.name = "Enemy #" + to_string(i);
         characters.push_back(enemy);
     }
@@ -347,8 +353,40 @@ int printedEnemiesCount() {
     return count;
 }
 
-void saveCharacter(Character& player) {
+void saveCharacter(ofstream& file, vector<Character>& characters) {
+    int charactersCount = characters.size();
+    file.write((char*)&charactersCount, sizeof(charactersCount));
+    for (int i = 0; i < charactersCount; i++) {
+        int len = characters[i].name.length();
+        file.write((char*)&len, sizeof(len));
+        file.write(characters[i].name.c_str(), characters[i].name.length());
+        file.write((char*)&characters[i].health, sizeof(characters[i].health));
+        file.write((char*)&characters[i].armor, sizeof(characters[i].armor));
+        file.write((char*)&characters[i].damage, sizeof(characters[i].damage));
+        file.write((char*)&characters[i].coordinats.x, sizeof(characters[i].coordinats.x));
+        file.write((char*)&characters[i].coordinats.y, sizeof(characters[i].coordinats.y));
+        file.write((char*)&characters[i].isPlayer, sizeof(characters[i].isPlayer));
+    }
     
+}
+
+void loadCharacter(ifstream& file, vector<Character>& characters) {
+    int charactersCount = 0;
+    file.read((char*)&charactersCount, sizeof(charactersCount));
+    characters.clear();
+    characters.resize(charactersCount);
+    for (int i = 0; i < characters.size(); i++) {
+        int len;
+        file.read((char*)&len, sizeof(len));
+        characters[i].name.resize(len);
+        file.read((char*)characters[i].name.c_str(), len);
+        file.read((char*)&characters[i].health, sizeof(characters[i].health));
+        file.read((char*)&characters[i].armor, sizeof(characters[i].armor));
+        file.read((char*)&characters[i].damage, sizeof(characters[i].damage));
+        file.read((char*)&characters[i].coordinats.x, sizeof(characters[i].coordinats.x));
+        file.read((char*)&characters[i].coordinats.y, sizeof(characters[i].coordinats.y));
+        file.read((char*)&characters[i].isPlayer, sizeof(characters[i].isPlayer));
+    }
 }
 
 Character character(int x, int y, vector<Character> characters) {
@@ -361,10 +399,14 @@ Character character(int x, int y, vector<Character> characters) {
 }
 
 int main() {
-    srand(time(NULL));
+    srand(time(nullptr));
     vector<Character> characters;
     dataInitialisation(characters);
+    
 
+    //saveCharacter(file, characters);
+    
+    //loadCharacter(file2, characters);
     while (!endOfGame(characters)) {
         printGameMap(characters);
         cout << "Choose one of 4 directions: [left|top|right|bottom]\n";
@@ -379,11 +421,21 @@ int main() {
             direction = TOP;
         } else if (inputDirecton == "right") {
             direction = RIGHT;
-        } else {
+        } else if (inputDirecton == "bottom") {
             direction = BOTTOM;
-        } 
+        } else if (inputDirecton == "save") {
+            ofstream file("save.bin", ios::binary);
+            saveCharacter(file, characters);
+            file.close();
+            continue;
+        } else if (inputDirecton == "load") {
+            ifstream file2("save.bin", ios::binary);
+            loadCharacter(file2, characters);
+            file2.close();
+            continue;
+        }
         if (!isEndOfMapReached(direction, characters[0])) {
-            if (!isCharacterAhead(direction, characters[0])) {
+            if (!isCharacterAhead(direction, characters, PLAYER_INDEX)) {
                 move(characters[0], direction);
             } else {
                 vector<int> coord = enemyCoordinates(characters[0], direction);
@@ -392,8 +444,8 @@ int main() {
                 if (isDead(characters[enemyIndex])) {
                     
                     //Delete enemy from vector;
+                    cout << characters[enemyIndex].name << " has been slain" << endl;
                     characters.erase(characters.begin() + enemyIndex);
-                    cout << endl << characters[enemyIndex].name << " has been slain" << endl;
                     //characters.pop
                     //characters.resize(character.size() - 1);
                 }
@@ -402,24 +454,24 @@ int main() {
         for (int i = 1; i < 6; i++) {
             int enemyMove = rand() % 4;
             if (!isEndOfMapReached(enemyMove, characters[i])){
-                if(!isCharacterAhead(enemyMove, characters[i])) {
+                if(!isCharacterAhead(enemyMove, characters,i)) {
                     move(characters[i], enemyMove);
                 } else {
-                    if (isPlayerAhead(enemyMove, characters[i])) {
+                    if (isPlayerAhead(enemyMove, characters,i)) {
                         enemyAttack(characters[i], characters[0]);
                     }
                 }
             }
         }
-        int size = characters.size();
+        // int size = characters.size();
 
-        if (printedEnemiesCount() != (size - 1) ) {
-            for (int i = 0; i < characters.size(); i++)
-            {
-                cout << characters[i].name << endl;
-                cout << characters[i].coordinats.x << " " << characters[i].coordinats.y << endl;
-            }
+        // if (printedEnemiesCount() != (size - 1) ) {
+        //     for (int i = 0; i < characters.size(); i++)
+        //     {
+        //         cout << characters[i].name << endl;
+        //         cout << characters[i].coordinats.x << " " << characters[i].coordinats.y << endl;
+        //     }
             
-        }
+        // }
     }
 }
