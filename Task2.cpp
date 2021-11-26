@@ -326,5 +326,8 @@ int main() {
         plots.push_back(plot);
     }
 
+
+
     cout << getVillageInfo(plots) << endl;
+    cout << "hi";
 }
