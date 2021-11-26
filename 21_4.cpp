@@ -263,7 +263,7 @@ void dataInitialisation(vector<Character>& characters) {
 
     cout << "Enter the name\n";
     cin >> player.name;
-    cout << "Enter the stats of your getCharacterByCoordinates: [Health] [Armor] [Damage]\n";
+    cout << "Enter the stats of your character: [Health] [Armor] [Damage]\n";
     cin >> player.health >> player.armor >> player.damage;
 
     player.coordinates.x = rand() % 40;
