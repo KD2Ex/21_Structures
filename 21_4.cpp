@@ -404,15 +404,5 @@ int main() {
                 }
             }
         }
-        // int size = characters.size();
-
-        // if (printedEnemiesCount() != (size - 1) ) {
-        //     for (int i = 0; i < characters.size(); i++)
-        //     {
-        //         cout << characters[i].name << endl;
-        //         cout << characters[i].coordinates.x << " " << characters[i].coordinates.y << endl;
-        //     }
-            
-        // }
     }
 }
