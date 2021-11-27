@@ -326,15 +326,6 @@ void loadCharacter(ifstream& file, vector<Character>& characters) {
     }
 }
 
-//Character getCharacterByCoordinates(int x, int y, vector<Character> characters) {
-//    Character character;
-//    for (int i = 0; i < characters.size(); i++)
-//    {
-//        if (x == characters[i].coordinates.x && y == characters[i].coordinates.y) character = characters[i];
-//    }
-//    return character;
-//}
-
 int main() {
     srand(time(nullptr));
     vector<Character> characters;
