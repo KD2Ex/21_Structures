@@ -62,7 +62,7 @@ string getVillageInfo(vector<Plot> plots) {
 
     for (int i = 0; i < plots.size(); i++) {
 
-        result += i + " plot has\n" 
+        result += to_string((i + 1))  + " plot has\n" 
         + to_string(plots[i].houses.size()) + " dwelling houses\n"
         + to_string(plots[i].garages.size()) + " garages\n" 
         + to_string(plots[i].barns.size()) + " barns\n" 
@@ -129,19 +129,19 @@ string getVillageInfo(vector<Plot> plots) {
 
         for (int j = 0; j < plots[i].garages.size(); j++) {
 
-            result += "Garage square is "
+            result += "Garage " + to_string((j + 1)) + " square is "
             + to_string(plots[i].garages[j].square) + " m2\n";
         }
 
         for (int j = 0; j < plots[i].barns.size(); j++) {
 
-            result += "Barn square is " 
+            result += "Barn " + to_string((j + 1)) + " square is " 
             + to_string(plots[i].barns[j].square) + " m2\n";
         }
         
         for (int j = 0; j < plots[i].baths.size(); j++) {
 
-            result += "Bath square is " 
+            result += "Bath " + to_string((j + 1)) + " square is " 
             + to_string(plots[i].baths[j].square) + " m2\n";
 
              if (plots[i].baths[j].isOvenAvaliable) {
@@ -150,77 +150,28 @@ string getVillageInfo(vector<Plot> plots) {
                 result += "Oven is not avaliable\n";
             }
         }
-
-        // if (plots[i].houses.quare != 0s) {
-        //     result += "House square is " + to_string(plots[i].houses.square) + " m2\n";
-        //     if (plots[i].houses.isOvenAvaliable) {
-        //         result += "Oven is avaliable\n";
-        //     } else {
-        //         result += "Oven is not avaliable\n";
-        //     }
-        //     result += "House have " + to_string(plots[i].houses.floors.size()) + " floors\n";
-        //     for (int j = 0; j < plots[i].houses.floors.size(); j++) {
-        //         result += "Floor " + to_string((j + 1)) + " height is " 
-        //         + to_string(plots[i].houses.floors[j].height) + " m\n";
-        //         result += "Floor " + to_string((j + 1)) + " have " 
-        //         + to_string(plots[i].houses.floors[j].rooms.size()) + " rooms\n";
-        //         for (int k = 0; k < plots[i].houses.floors[j].rooms.size(); k++) {
-        //             result += "Room " + to_string((k + 1)) + " square is " + to_string(plots[i].houses.floors[j].rooms[k].square) + " m\n";
-        //             string roomType;
-        //             switch (plots[i].houses.floors[j].rooms[k].type) 
-        //             {
-        //             case roomType::BEDROOM:
-        //                 roomType = " bedroom ";
-        //                 break;
-        //             case roomType::KITCHEN:
-        //                 roomType = " kitchen ";
-        //                 break;
-        //             case roomType::CHILDREN_ROOM:
-        //                 roomType = " children room ";
-        //                 break;
-        //             case roomType::LIVING_ROOM:
-        //                 roomType = " living room ";
-        //                 break;
-        //             case roomType::BATHROOM:
-        //                 roomType = " bathroom ";
-        //                 break;
-        //             default:
-        //                 break;
-        //             }
-        //             result += "Type - " + roomType + "\n";    
-        //         }
-        //     }
-        // }
-        // if (plots[i].barns.square != 0) {
-        //     result += "Barn square is " + to_string(plots[i].barns.square) + " m2\n";
-        // }
-        // if (plots[i].garages.square != 0) {
-        //     result += "Garage square is " + to_string(plots[i].garages.square) + " m2\n";
-        // }
-        // if (plots[i].baths.square != 0) {
-        //     result += "Bath square is " + to_string(plots[i].baths.square) + " m2\n";
-        //      if (plots[i].baths.isOvenAvaliable) {
-        //         result += "Oven is avaliable\n";
-        //     } else {
-        //         result += "Oven is not avaliable\n";
-        //     }
-        // }
-        
     }
     return result;
 }
 
+int getTotalSquare(Plot plot) {
+    int totalSquare = 0;
 
-// string printAvaliableOptions(Plot plot) {
-//     string output = "";
+    for (int i = 0; i < plot.houses.size(); i++) {
+        totalSquare += plot.houses[i].square;
+    }
+    for (int i = 0; i < plot.garages.size(); i++) {
+        totalSquare += plot.garages[i].square;
+    }
+    for (int i = 0; i < plot.barns.size(); i++) {
+        totalSquare += plot.barns[i].square;
+    }
+    for (int i = 0; i < plot.baths.size(); i++) {
+        totalSquare += plot.baths[i].square;
+    }
 
-//     if (plot.houses.square == 0) output += "1. House\n";
-//     if (plot.garage.square == 0) output += "2. Garage\n";
-//     if (plot.barn.square == 0) output += "3. Barn\n";
-//     if (plot.bath.square == 0) output += "4. Bath\n";
-    
-//     return output;
-// }
+    return totalSquare;
+}
 
 int main() {
     int plotCount;
@@ -229,10 +180,11 @@ int main() {
     vector<Plot> plots;
     cout << "Input the number of plots in village\n";
     cin >> plotCount;
+    int id = 1;
 
     for (int i = 0; i < plotCount; ++i) {
         Plot plot;
-        plot.id++;
+        plot.id = id;
 
         cout << "Input the number of buildings in " << plot.id << " plot\n";
         cin >> buildingsCount;
@@ -281,7 +233,7 @@ int main() {
                             Room room;
                             int type;
                             
-                            cout << "Input the room square\n";
+                            cout << "Input the room " << l + 1 << " square\n";
                             cin >> room.square;
                             cout << "Select the room type\n"
                             << "1. Bedroom\n" 
@@ -317,7 +269,18 @@ int main() {
                 case houseType::BATH: {
                     Bath bath;
                     cout << "Input bath square\n";
-                    cin >> bath.isOvenAvaliable >> bath.square;
+                    cin  >> bath.square;
+                    cout << "Is oven avaliable?\n";
+
+                    char answer;
+                    cin >> answer;
+
+                    if (answer == 'y' || answer == 'Y') {
+                        bath.isOvenAvaliable = true;
+                    } else if (answer == 'n' || answer == 'N') {
+                        bath.isOvenAvaliable = false;
+                    }
+
                     plot.baths.push_back(bath);
                     break;
                 }
@@ -326,12 +289,14 @@ int main() {
             }
         }
         plots.push_back(plot);
+        id++;
     }
 
-
-
     cout << getVillageInfo(plots) << endl;
-    cout << "hi";
+    
+    for (int i = 0; i < plots.size(); i++) {
+        cout << "Plot " << i + 1 << " square is " << getTotalSquare(plots[i]) << " m2" << endl;
+    }
 }
 
-//27.11.2021 11.52 - Укaзать номер комнаты при вводе ее данных
+//27.11.2021 11.52 - Укaзать номер комнаты при вводе ее данных - Done
