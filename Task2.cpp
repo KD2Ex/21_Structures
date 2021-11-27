@@ -68,18 +68,18 @@ string getVillageInfo(vector<Plot> plots) {
         + to_string(plots[i].barns.size()) + " barns\n" 
         + to_string(plots[i].baths.size()) + " baths\n"; 
 
-        for (int j = 0; j < plots[j].houses.size(); j++) {
+        for (int j = 0; j < plots[i].houses.size(); j++) {
 
             result += "House " 
             + to_string((j + 1)) + " square is " 
             + to_string(plots[i].houses[j].square) + " m2\n";
 
-            if (plots[i].houses[i].isOvenAvaliable) {
+            if (plots[i].houses[j].isOvenAvaliable) {
                 result += "Oven is avaliable\n";
             } else {
                 result += "Oven is not avaliable\n";
             }
-
+           
             result += "House " 
             + to_string((j + 1)) + " have " 
             + to_string(plots[i].houses[j].floors.size()) + " floors\n";
@@ -270,7 +270,7 @@ int main() {
                         
                         Floor floor;
                         
-                        cout << "Input the floor " << k + 1 << "height\n";
+                        cout << "Input the floor " << k + 1 << " height\n";
                         cin >> floor.height;
                         cout << "Input the room count\n";
                         int roomCount;
@@ -302,19 +302,21 @@ int main() {
                 case houseType::GARAGE: {
                     Garage garage;
 
-                    cout << "";
+                    cout << "Input garage square\n";
                     cin >> garage.square;
                     plot.garages.push_back(garage);
                     break;
                 }
                 case houseType::BARN: {
                     Barn barn;
+                    cout << "Input barn square\n";
                     cin >> barn.square;
                     plot.barns.push_back(barn);
                     break;
                 }
                 case houseType::BATH: {
                     Bath bath;
+                    cout << "Input bath square\n";
                     cin >> bath.isOvenAvaliable >> bath.square;
                     plot.baths.push_back(bath);
                     break;
@@ -331,3 +333,5 @@ int main() {
     cout << getVillageInfo(plots) << endl;
     cout << "hi";
 }
+
+//27.11.2021 11.52 - Указать номер комнаты при вводе ее данных
