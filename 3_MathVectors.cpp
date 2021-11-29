@@ -46,12 +46,12 @@ Vector normalize (Vector v) {
     return scale(v,l);
 }
 
-string printVectorInfo (Vector vec) {
-    return vec.name + "\nx: " + vec.x + "\ny:" + vec.y;
+string getVectorInfo (Vector vec) {
+    return vec.name + "\nx: " + to_string(vec.x) + "\ny: " + to_string(vec.y);
 }
 
 int main() {
-    int command;
+    int inputCommand;
     Vector v1, v2, vecResult;
     double vecLength = 0;
 
@@ -61,37 +61,71 @@ int main() {
     << "3. Scale\n"
     << "4. Length\n"
     << "5. Normalize\n";
-    cin >> command;
+    cin >> inputCommand;
 
-    switch (command) {
+    switch (inputCommand) {
         case Commands::ADD:
-            cout << "Input the coordinates of ";
-            cin >> v1.x >> v1.y >> v2.x >> v2.y;
+            cout << "Enter the name of the first vector:\n";
+            cin >> v1.name;
+            cout << "Enter the coordinates of the first vector:\n";
+            cin >> v1.x >> v1.y;
+
+            cout << "Enter the name of the second vector:\n";
+            cin >> v2.name;
+            cout << "Enter the coordinates of the second vector:\n";
+            cin >> v2.x >> v2.y;
+
             vecResult = add(v1, v2);
-            vecResult.name = "v1 + v2";
-            cout << "Result vector:\n" << printVectorInfo(vecResult);
+            vecResult.name = v1.name + " + " + v2.name;
+
+            cout << "Result vector:\n" << getVectorInfo(vecResult);
             break;
         case Commands::LENGTH:
+            cout << "Enter the name of the vector:\n";
+            cin >> v1.name;
+            cout << "Enter the coordinates of the vector:\n";
             cin >> v1.x >> v1.y;
+
             vecLength = length(v1);
-            cout << "Vector length is: " << vecLength;
+
+            cout << v1.name << " length is: " << vecLength;
             break;
         case Commands::SUBTRACT:
-            cin >> v1.x >> v1.y >> v2.x >> v2.y;
+            cout << "Enter the name of the first vector:\n";
+            cin >> v1.name;
+            cout << "Enter the coordinates of the first vector:\n";
+            cin >> v1.x >> v1.y;
+
+            cout << "Enter the name of the second vector:\n";
+            cin >> v2.name;
+            cout << "Enter the coordinates of the second vector:\n";
+            cin >> v2.x >> v2.y;
+
             vecResult = subtract(v1, v2);
-            vecResult.name = "v1 - v2";
-            cout << "Result vector:\n" << printVectorInfo(vecResult);
+            vecResult.name = v1.name + " - " + v2.name;
+            cout << "Result vector:\n" << getVectorInfo(vecResult);
             break;
         case Commands::SCALE:
             double number;
-            cin >> v1.x >> v1.y >> number;
+            cout << "Enter the name of the vector:\n";
+            cin >> v1.name;
+            cout << "Enter the coordinates of the vector:\n";
+            cin >> v1.x >> v1.y;
+            cout << "Enter the number by which you want to multiply the vector:\n";
+            cin >> number;
+
             vecResult = scale(v1, number);
-            cout << "Result vector:\n " << printVectorInfo(vecResult);
+            vecResult.name = v1.name;
+            cout << "Result vector:\n " << getVectorInfo(vecResult);
             break;
         case Commands::NORMALIZE:
+            cout << "Enter the name of the vector:\n";
+            cin >> v1.name;
+            cout << "Enter the coordinates of the vector:\n";
             cin >> v1.x >> v1.y;
             vecResult = normalize(v1);
-            cout << "Result vector:\n " << printVectorInfo(vecResult);
+            vecResult.name = v1.name;
+            cout << "Result vector:\n " << getVectorInfo(vecResult);
             break;
         default:
             cout << "Wrong operation";
