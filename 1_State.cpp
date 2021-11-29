@@ -15,11 +15,6 @@ void add(ofstream& file, state& record) {
 }
 
 void read(ifstream& file, state& record) {
-/*    do {
-        file >> record.first_name >> record.last_name >> record.date >> record.cash;
-        cout << record.first_name << " " << record.last_name << " "  << record.date << " " << record.cash
-        << " " << endl;
-    } while(!(file.eof() || record.first_name.empty()));*/
     while(!(file.eof())) {
         file >> record.first_name >> record.last_name >> record.date >> record.cash;
         if (record.first_name.empty()) {
@@ -39,12 +34,22 @@ int main() {
     state record;
     if (operation == "add") {
         ofstream file("state.txt", ios::app);
+
+        if (!file.is_open()) {
+            cout << "Couldn't open the file\n";
+            return 0;
+        }
+
         cout << "Enter a record:\n";
         cin >> record.first_name >> record.last_name >> record.date >> record.cash;
         add(file, record);
         file.close();
     } else if (operation == "read") {
         ifstream file("state.txt");
+        if (!file.is_open()) {
+            cout << "Couldn't open the file\n";
+            return 0;
+        }
         read(file,record);
         file.close();
     } else {

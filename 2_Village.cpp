@@ -31,7 +31,7 @@ struct Floor {
 struct House {
     int square = 0;
     vector<Floor> floors;
-    bool isOvenAvaliable = false;
+    bool isOvenAvailable = false;
 };
 
 struct Garage {
@@ -44,7 +44,7 @@ struct Barn {
 
 struct Bath {
     int square = 0;
-    bool isOvenAvaliable = false;
+    bool isOvenAvailable = false;
 };
 
 struct Plot {
@@ -74,10 +74,10 @@ string getVillageInfo(vector<Plot> plots) {
             + to_string((j + 1)) + " square is " 
             + to_string(plots[i].houses[j].square) + " m2\n";
 
-            if (plots[i].houses[j].isOvenAvaliable) {
-                result += "Oven is avaliable\n";
+            if (plots[i].houses[j].isOvenAvailable) {
+                result += "Oven is available\n";
             } else {
-                result += "Oven is not avaliable\n";
+                result += "Oven is not available\n";
             }
            
             result += "House " 
@@ -144,10 +144,10 @@ string getVillageInfo(vector<Plot> plots) {
             result += "Bath " + to_string((j + 1)) + " square is " 
             + to_string(plots[i].baths[j].square) + " m2\n";
 
-             if (plots[i].baths[j].isOvenAvaliable) {
-                result += "Oven is avaliable\n";
+             if (plots[i].baths[j].isOvenAvailable) {
+                result += "Oven is available\n";
             } else {
-                result += "Oven is not avaliable\n";
+                result += "Oven is not available\n";
             }
         }
     }
@@ -210,9 +210,9 @@ int main() {
                     cin >> answer;
 
                     if (answer == 'y' || answer == 'Y') {
-                        house.isOvenAvaliable = true;
+                        house.isOvenAvailable = true;
                     } else if (answer == 'n' || answer == 'N') {
-                        house.isOvenAvaliable = false;
+                        house.isOvenAvailable = false;
                     }
 
                     cout << "Input the floors count\n";
@@ -270,15 +270,15 @@ int main() {
                     Bath bath;
                     cout << "Input bath square\n";
                     cin  >> bath.square;
-                    cout << "Is oven avaliable?\n";
+                    cout << "Is oven available?\n";
 
                     char answer;
                     cin >> answer;
 
                     if (answer == 'y' || answer == 'Y') {
-                        bath.isOvenAvaliable = true;
+                        bath.isOvenAvailable = true;
                     } else if (answer == 'n' || answer == 'N') {
-                        bath.isOvenAvaliable = false;
+                        bath.isOvenAvailable = false;
                     }
 
                     plot.baths.push_back(bath);
@@ -298,5 +298,3 @@ int main() {
         cout << "Plot " << i + 1 << " square is " << getTotalSquare(plots[i]) << " m2" << endl;
     }
 }
-
-//27.11.2021 11.52 - Укaзать номер комнаты при вводе ее данных - Done
